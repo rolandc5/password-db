@@ -4,7 +4,7 @@ const mongoose = require('mongoose'), Schema = mongoose.Schema;
 const bodyParser = require('body-parser');
 
 const server = express();
-const port = 3030;
+const port = process.env.PORT || 3030;
 server.use(cors());
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());

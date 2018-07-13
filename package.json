@@ -16,6 +16,7 @@
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.1.6",
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.17.5",
+    "react-router-dom": "^4.3.1"
   }
 }

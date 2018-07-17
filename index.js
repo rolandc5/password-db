@@ -47,13 +47,13 @@ server.get('/', (req, res) => {
 });
 
 server.post('/createUser', (req, res) => {
-  const { loginUser, loginPass } = req.body;
-  if (!loginUser || !loginPass) {
+  const { username, password } = req.body;
+  if (!username || !password) {
     return res.status(500).json({ direction: 'Failed', data: 'Empty Input' });
   }
   const newUser = new UserLogin();
-  newUser.username = loginUser;
-  newUser.password = loginPass;
+  newUser.username = username;
+  newUser.password = password;
   newUser.save(err => {
     if (err) {
       return res.status(500).json({ direction: 'Failed', data: err });
@@ -63,16 +63,17 @@ server.post('/createUser', (req, res) => {
 });
 
 server.post('/login', (req, res) => {
-  const { loginUser, loginPass } = req.body;
-  if (!loginUser || !loginPass) {
+  console.log('hi');
+  const { username, password } = req.body;
+  if (!username || !password) {
     return res.status(500).json({ direction: 'Failed', data: 'Input is empty' });
   }
-  UserLogin.findOne({ username: loginUser })
+  UserLogin.findOne({ username: username })
     .then(packet => {
       if (!packet) {
         return res.status(402).json({ direction: 'Failed', data: 'Username or Password is incorrect' });
       }
-      if (packet.password !== loginPass) {
+      if (packet.password !== password) {
         return res.status(402).json({ direction: 'Failed', data: 'Username or Password is incorrect' });
       }
       res.status(200).json({ direction: 'Success', data: packet });
@@ -102,7 +103,7 @@ server.get('/getInfo', (req, res) => {
       res.status(200).json({ direction: 'Success', data: packet });
     })
     .catch(err => {
-      return res.status(400).json({ err: err.message });
+      return res.status(400).json({ direction: 'Failed', data: err });
     });
 });
 

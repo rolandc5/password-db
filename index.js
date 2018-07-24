@@ -46,6 +46,9 @@ server.get('/', (req, res) => {
   res.send('IF YOU ARE SEEING THIS! YOU ARE NOT ALLOWED HERE');
 });
 
+server.post('/isLoggedIn', (req, res) => {
+})
+
 server.post('/createUser', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -63,7 +66,6 @@ server.post('/createUser', (req, res) => {
 });
 
 server.post('/login', (req, res) => {
-  console.log('hi');
   const { username, password } = req.body;
   if (!username || !password) {
     return res.status(500).json({ direction: 'Failed', data: 'Input is empty' });
@@ -86,6 +88,8 @@ server.post('/login', (req, res) => {
 
 server.post('/sendInfo', (req, res) => {
   const { username, password, website } = req.body;
+  console.log(req.body);
+  console.log('hello');
   if (!username || !password || !website) {
     return res.status(403).json({ message: 'empty input' });
   }
@@ -96,6 +100,24 @@ server.post('/sendInfo', (req, res) => {
   addInfo.save();
   res.status(200).json({ direction: 'Success', data: 'Saved' });
 });
+
+server.post('/sendOne', (req, res) => {
+  let { website } = req.body;
+  if (!website) {
+    return res.status(500).json({ direction: 'Failed', data: 'Input is empty' });
+  }
+  website = website.toLowerCase();
+  User.findOne({ website })
+    .then(result => {
+      if (!result) {
+        return res.status(403).json({ direction: 'Failed', message: 'No results' });
+      }
+      res.status(200).json({ direction: 'Success', data: result });
+    })
+    .catch(err => {
+      res.statu(500).json({ direction: 'Failed', data: err });
+    });
+})
 
 server.get('/getInfo', (req, res) => {
   User.find({})
